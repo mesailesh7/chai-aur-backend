@@ -8,9 +8,9 @@ const storage = multer.diskStorage({
     cb(null, "./public/temp");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    // file.originalname is what user uploads the file name with its gonna be saved as it is and .file has many properties can be checked in multer
+    cb(null, file.originalname);
   },
 });
 
-const upload = multer({ storage: storage });
+export const upload = multer({ storage: storage });
