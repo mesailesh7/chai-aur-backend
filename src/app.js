@@ -23,3 +23,4 @@ app.use("/api/v1/users", userRouter);
 //
 
 export { app };
+// has to be imported at index.js
