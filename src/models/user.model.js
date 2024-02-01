@@ -53,7 +53,7 @@ const userSchema = new Schema(
 // ON pre callback don't use arrow function since in arrow function it doesn't have access to "this"
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next(); //In here its checking if password field is not modified then it will just go to the next stop but if it is changed then it will run the code below. We are running this check because if we don't then anytime the userModel is edited or saved it will hash the password again
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 

@@ -8,7 +8,7 @@ import { app } from "./app.js";
 import express from "express";
 
 dotenv.config({
-  path: "./env",
+  path: "./.env",
 });
 
 connectDB()
