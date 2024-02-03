@@ -46,7 +46,7 @@ const userSchema = new Schema(
       type: String,
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 // pre can be used on middlewares like validate,save,remove,updateOne,deleteOne,

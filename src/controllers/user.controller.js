@@ -8,19 +8,20 @@ const registerUser = asyncHandler(async (req, res, error, next) => {
   // get user details from front end
   // from form or json data can be fetched from body but for url its different
   const { fullName, email, username, password } = req.body;
-  console.log("email", email);
+  // console.log("email", email);
   // validation-- not empty
   // if (fullName === "") {
   //   throw new ApiError(400, "Fullname is required");
   // }
 
+  // check if its empty or not
   if (
     [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "all field are required");
   }
-  // check if user already exists:username and email
 
+  // check if user already exists:username and email
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
@@ -29,15 +30,30 @@ const registerUser = asyncHandler(async (req, res, error, next) => {
     throw new ApiError(409, "user with email or username already exists");
   }
 
+  // console.log(req.files);
+
   // check for images, check for avatar
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // we can do it like this but we won't be able to check if coverImage is there or not because of ? so we are going to use classic way
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
+
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar is required");
   }
+
   // upload them to cloudinary,avatar
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
   if (!avatar) {
     throw new ApiError(400, "Avatar is required");
   }
